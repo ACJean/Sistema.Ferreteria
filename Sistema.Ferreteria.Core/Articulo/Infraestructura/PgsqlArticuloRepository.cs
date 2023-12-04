@@ -172,10 +172,21 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
                         articulo.Id
                     }, dbTransaction);
 
-                    object[] imagenes = articulo.Imagenes.Select(img => new { img.Id, img.Imagen }).ToArray();
-                    await dbConnection.ExecuteAsync(
+                    object[] imagenesInsertar = articulo.Imagenes
+                        .Where(img => img.Id == null)
+                        .Select(img => new { ArticuloId = articulo.Id, img.Imagen })
+                        .ToArray();
+                    if (imagenesInsertar.Length > 0) await dbConnection.ExecuteAsync(
+                        "insert into articulo_imagen (aim_articulo_id, aim_img) values (@ArticuloId, @Imagen)",
+                        imagenesInsertar, dbTransaction);
+
+                    object[] imagenesActualizar = articulo.Imagenes
+                        .Where(img => img.Id != null)
+                        .Select(img => new { img.Id, img.Imagen })
+                        .ToArray();
+                    if (imagenesActualizar.Length > 0) await dbConnection.ExecuteAsync(
                         "update articulo_imagen set aim_img = @Imagen where aim_id = @Id",
-                        imagenes);
+                        imagenesActualizar);
 
                     await dbConnection.ExecuteAsync(
                         "insert into articulo_trace (atr_articulo_id, atr_descripcion, art_fecha, art_usuario_id) values " +

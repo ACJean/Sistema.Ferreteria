@@ -49,6 +49,7 @@ namespace Sistema.Ferreteria.Core.Venta.Aplicacion
             RespuestaModel respuesta = new();
             try
             {
+                cuenta.ClienteId = cuenta.ClienteId == 0 ? null : cuenta.ClienteId;
                 cuenta.FechaEmision = DateTime.Now;
                 _logger.LogTrace("Cuenta nueva: {Cuenta}", cuenta);
 

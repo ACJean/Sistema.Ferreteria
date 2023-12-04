@@ -10,8 +10,8 @@ namespace Sistema.Ferreteria.Core.Articulo.Dominio
     public class ArticuloImagenModel
     {
 
-        public int Id { get; set; }
-        public int ArticuloId { get; set; }
+        public int? Id { get; set; }
+        public int? ArticuloId { get; set; }
         [JsonIgnore]
         public byte[]? Imagen { get; set; }
         public string ImagenBase64 { get; set; }

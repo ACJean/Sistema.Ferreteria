@@ -10,20 +10,20 @@ namespace Sistema.Ferreteria.Core.Venta.Dominio
     {
 
         public int Id { get; set; }
-        public int ClienteId { get; set; }
+        public int? ClienteId { get; set; }
         public DateTime? FechaEmision { get; set; }
         public decimal Subtotal 
         { 
             get
             {
-                return Detalles.Sum(d => d.Total);
+                return Detalles.Where(d => d.Tipo == TipoDetalle.Item).Sum(d => d.Total);
             }
         }
         public decimal Impuestos 
         { 
             get
             {
-                return Detalles.Sum(d => d.Total) * PorcentajeImpuesto;
+                return Detalles.Where(d => d.Tipo == TipoDetalle.Item).Sum(d => d.Total) * PorcentajeImpuesto;
             }
         }
         public decimal Total 

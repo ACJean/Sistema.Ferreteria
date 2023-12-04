@@ -95,6 +95,7 @@ namespace Sistema.Ferreteria.Core.Cliente.Aplicacion
 
                 respuesta.Codigo = 201;
                 respuesta.Mensaje = "Cliente creado.";
+                respuesta.Datos = cliente;
             }
             catch (Exception ex)
             {
