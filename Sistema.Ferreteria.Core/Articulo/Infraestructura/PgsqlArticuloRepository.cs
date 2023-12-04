@@ -144,6 +144,21 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
             return articulos;
         }
 
+        public async Task<List<ArticuloModel>> Reporte()
+        {
+            List<ArticuloModel> articulos;
+            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            {
+                dbConnection.Open();
+                articulos = (await dbConnection.QueryAsync<ArticuloModel>(
+                    "select art_id as Id, art_codigo as Codigo, art_nombre as Nombre, art_material as Material, " +
+                    "art_durabilidad as Durabilidad, art_peso as Peso, art_tamanio as Tamanio, art_precio as Precio, " +
+                    "art_stock as Stock, art_estado as Estado " +
+                    "from articulo where art_estado in (1,2)")).ToList();
+            }
+            return articulos;
+        }
+
         public async Task<int> Update(ArticuloModel articulo, ArticuloTraceModel trace)
         {
             int rowsAffected;

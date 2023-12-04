@@ -14,6 +14,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Dominio
         Task<List<ArticuloModel>> Get();
         Task<int> Update(ArticuloModel articulo, ArticuloTraceModel trace);
         Task<int> Delete(int id, ArticuloTraceModel trace);
+        Task<List<ArticuloModel>> Reporte();
 
     }
 }

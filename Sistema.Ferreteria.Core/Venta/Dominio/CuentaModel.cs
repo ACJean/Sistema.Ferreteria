@@ -11,6 +11,7 @@ namespace Sistema.Ferreteria.Core.Venta.Dominio
 
         public int Id { get; set; }
         public int? ClienteId { get; set; }
+        public string? ClienteCedula { get; set; }
         public DateTime? FechaEmision { get; set; }
         public decimal Subtotal 
         { 
@@ -23,7 +24,7 @@ namespace Sistema.Ferreteria.Core.Venta.Dominio
         { 
             get
             {
-                return Detalles.Where(d => d.Tipo == TipoDetalle.Item).Sum(d => d.Total) * PorcentajeImpuesto;
+                return Detalles.Where(d => d.Tipo == TipoDetalle.Item).Sum(d => d.Total) * 0.12m;
             }
         }
         public decimal Total 

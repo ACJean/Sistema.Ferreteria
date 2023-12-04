@@ -72,7 +72,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Aplicacion
                     return respuesta;
                 }
 
-                articulo.Estado = 2;
+                articulo.Estado = Estado.DeBaja;
 
                 ArticuloTraceModel trace = new ArticuloTraceModel
                 {
@@ -107,7 +107,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Aplicacion
             RespuestaModel respuesta = new();
             try
             {
-                articulo.Estado = 1;
+                articulo.Estado = Estado.Activo;
                 foreach (ArticuloImagenModel articuloImagen in articulo.Imagenes)
                 {
                     articuloImagen.Imagen = Convert.FromBase64String(articuloImagen.ImagenBase64);
@@ -228,5 +228,25 @@ namespace Sistema.Ferreteria.Core.Articulo.Aplicacion
             return respuesta;
         }
 
+        public async Task<RespuestaModel> Reporte()
+        {
+            RespuestaModel respuesta = new();
+            try
+            {
+
+                List<ArticuloModel> articulos = await _articuloRepository.Reporte();
+
+                respuesta.Codigo = 200;
+                respuesta.Mensaje = $"{articulos.Count} articulos encontrados.";
+                respuesta.Datos = articulos;
+            }
+            catch (Exception ex)
+            {
+                respuesta.Codigo = 500;
+                respuesta.Mensaje = ex.Message;
+                _logger.LogError(new EventId(1), ex, ex.Message);
+            }
+            return respuesta;
+        }
     }
 }

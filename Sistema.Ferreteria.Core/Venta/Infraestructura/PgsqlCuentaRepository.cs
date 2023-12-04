@@ -32,7 +32,8 @@ namespace Sistema.Ferreteria.Core.Venta.Infraestructura
             {
                 dbConnection.Open();
 
-                cuentas = (await dbConnection.QueryAsync<CuentaModel>("select cue_id as Id, cue_cliente_id as ClienteId, (cue_fecha_emision + cue_hora_emision) as FechaEmision from cuenta " +
+                cuentas = (await dbConnection.QueryAsync<CuentaModel>("select cue_id as Id, cue_cliente_id as ClienteId, COALESCE(cli_cedula, '9999999999') as ClienteCedula, (cue_fecha_emision + cue_hora_emision) as FechaEmision from cuenta " +
+                    "left join cliente on cuenta.cue_cliente_id = cliente.cli_id " +
                     "where @FiltrarFechas = false or (@FiltrarFechas = true and cue_fecha_emision >= @FechaInicio and cue_fecha_emision <= @FechaFinal)",
                     filtro)).ToList();
 

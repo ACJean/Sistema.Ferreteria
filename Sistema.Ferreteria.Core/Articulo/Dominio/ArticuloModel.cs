@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sistema.Ferreteria.Core.Compartido.Dominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,13 @@ namespace Sistema.Ferreteria.Core.Articulo.Dominio
         public string Tamanio { get; set; }
         public decimal Precio { get; set; }
         public short Stock { get; set; }
-        public short? Estado { get; set; }
+        public Estado? Estado { get; set; }
+        public string? EstadoString { 
+            get 
+            { 
+                return Estado?.ToString();
+            } 
+        }
         public List<ArticuloImagenModel> Imagenes { get; set; }
         [JsonIgnore]
         public List<ArticuloTraceModel> TrazabilidadArticulo { get; set; }

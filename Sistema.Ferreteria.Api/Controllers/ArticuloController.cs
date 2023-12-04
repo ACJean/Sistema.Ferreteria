@@ -66,11 +66,19 @@ namespace Sistema.Ferreteria.Api.Controllers
         }
 
         [HttpPut]
-        [Route("baja/{id}")]
-        public async Task<IActionResult> Baja([FromRoute] int id)
+        [Route("baja/{codigo}")]
+        public async Task<IActionResult> Baja([FromRoute] int codigo)
         {
             int usuarioId = Convert.ToInt32(HttpContext.User.FindFirstValue("id"));           
-            RespuestaModel respuesta = await _articuloManager.Baja(id, usuarioId);
+            RespuestaModel respuesta = await _articuloManager.Baja(codigo, usuarioId);
+            return StatusCode(respuesta.Codigo, respuesta);
+        }
+
+        [HttpGet]
+        [Route("reporte")]
+        public async Task<IActionResult> ReporteArticulo()
+        {
+            RespuestaModel respuesta = await _articuloManager.Reporte();
             return StatusCode(respuesta.Codigo, respuesta);
         }
 
