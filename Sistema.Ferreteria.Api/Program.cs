@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 });
 
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
-var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  .AddJwtBearer(options =>
