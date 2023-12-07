@@ -11,6 +11,7 @@ namespace Sistema.Ferreteria.Core.Venta.Dominio
 
         Task<int> Save(CuentaModel cuenta);
         Task<List<CuentaModel>> Get(FiltroCuentaModel filtro);
+        Task<List<CuentaModel>> Get(int usuarioId);
 
     }
 }

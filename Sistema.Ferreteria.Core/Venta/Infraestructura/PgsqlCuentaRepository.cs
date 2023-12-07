@@ -28,7 +28,7 @@ namespace Sistema.Ferreteria.Core.Venta.Infraestructura
         public async Task<List<CuentaModel>> Get(FiltroCuentaModel filtro)
         {
             List<CuentaModel>? cuentas;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
 
@@ -52,10 +52,38 @@ namespace Sistema.Ferreteria.Core.Venta.Infraestructura
             return cuentas;
         }
 
+        public async Task<List<CuentaModel>> Get(int usuarioId)
+        {
+            List<CuentaModel>? cuentas;
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
+            {
+                dbConnection.Open();
+
+                cuentas = (await dbConnection.QueryAsync<CuentaModel>("select cue_id as Id, cue_cliente_id as ClienteId, COALESCE(cli_cedula, '9999999999') as ClienteCedula, (cue_fecha_emision + cue_hora_emision) as FechaEmision " +
+                    "from cuenta left join cliente on cuenta.cue_cliente_id = cliente.cli_id inner join usuario on cliente.cli_id = usuario.usu_cliente_id " +
+                    "where usuario.usu_id = @UsuarioId",
+                    new { UsuarioId = usuarioId })).ToList();
+
+                List<DetalleCuentaModel> detalles = (await dbConnection.QueryAsync<DetalleCuentaModel>(
+                    "select dcu.dcu_id as Id, dcu.dcu_cuenta_id as CuentaId, dcu.dcu_tipo as Tipo, " +
+                    "dcu.dcu_articulo_id as ArticuloId, dcu.dcu_cantidad as Cantidad, dcu.dcu_total as Total " +
+                    "from detalle_cuenta as dcu inner join cuenta as cue on cue.cue_id = dcu.dcu_cuenta_id " +
+                    "left join cliente as cli on cue.cue_cliente_id = cli.cli_id inner join usuario as usu on cli.cli_id = usu.usu_cliente_id " +
+                    "where usu.usu_id = @UsuarioId",
+                    new { UsuarioId = usuarioId })).ToList();
+
+                cuentas.ForEach(c =>
+                {
+                    c.Detalles = detalles.Where(d => c.Id == d.CuentaId).ToList();
+                });
+            }
+            return cuentas;
+        }
+
         public async Task<int> Save(CuentaModel cuenta)
         {
             int id = 0;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 using IDbTransaction dbTransaction = dbConnection.BeginTransaction();

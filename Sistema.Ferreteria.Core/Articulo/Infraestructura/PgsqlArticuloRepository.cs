@@ -24,7 +24,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
         public async Task<int> Create(ArticuloModel articulo, ArticuloTraceModel trace)
         {
             int id = 0;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 using IDbTransaction dbTransaction = dbConnection.BeginTransaction();
@@ -71,7 +71,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
         public async Task<int> Delete(int id, ArticuloTraceModel trace)
         {
             int rowsAffected;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
 
@@ -104,7 +104,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
         public async Task<ArticuloModel?> Get(int codigo)
         {
             ArticuloModel? articulo = null;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 articulo = await dbConnection.QueryFirstOrDefaultAsync<ArticuloModel>(
@@ -125,7 +125,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
         {
             List<ArticuloModel> articulos;
             List<ArticuloImagenModel> imagenesArticulos;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 articulos = (await dbConnection.QueryAsync<ArticuloModel>(
@@ -147,7 +147,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
         public async Task<List<ArticuloModel>> Reporte()
         {
             List<ArticuloModel> articulos;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 articulos = (await dbConnection.QueryAsync<ArticuloModel>(
@@ -162,7 +162,7 @@ namespace Sistema.Ferreteria.Core.Articulo.Infraestructura
         public async Task<int> Update(ArticuloModel articulo, ArticuloTraceModel trace)
         {
             int rowsAffected;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
 

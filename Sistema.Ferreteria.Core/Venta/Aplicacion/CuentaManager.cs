@@ -44,6 +44,26 @@ namespace Sistema.Ferreteria.Core.Venta.Aplicacion
             return respuesta;
         }
 
+        public async Task<RespuestaModel> Obtener(int usuarioId)
+        {
+            RespuestaModel respuesta = new();
+            try
+            {
+                List<CuentaModel> cuentas = await _cuentaRepository.Get(usuarioId);
+
+                respuesta.Codigo = 200;
+                respuesta.Mensaje = $"{cuentas.Count} cuentas encontradas.";
+                respuesta.Datos = cuentas;
+            }
+            catch (Exception ex)
+            {
+                respuesta.Codigo = 500;
+                respuesta.Mensaje = ex.Message;
+                _logger.LogError(new EventId(1), ex, ex.Message);
+            }
+            return respuesta;
+        }
+
         public async Task<RespuestaModel> Procesar(CuentaModel cuenta)
         {
             RespuestaModel respuesta = new();

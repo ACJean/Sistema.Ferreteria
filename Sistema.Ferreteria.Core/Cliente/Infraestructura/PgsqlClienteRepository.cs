@@ -22,7 +22,7 @@ namespace Sistema.Ferreteria.Core.Cliente.Infraestructura
         public async Task<int> Create(ClienteModel cliente)
         {
             int id = 0;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 id = await dbConnection.ExecuteScalarAsync<int>(
@@ -43,7 +43,7 @@ namespace Sistema.Ferreteria.Core.Cliente.Infraestructura
         public async Task<int> Delete(string cedula)
         {
             int rowsAffected;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 rowsAffected = await dbConnection.ExecuteAsync(
@@ -56,7 +56,7 @@ namespace Sistema.Ferreteria.Core.Cliente.Infraestructura
         public async Task<ClienteModel?> Get(string cedula)
         {
             ClienteModel? cliente = null;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 cliente = await dbConnection.QueryFirstOrDefaultAsync<ClienteModel>(
@@ -71,7 +71,7 @@ namespace Sistema.Ferreteria.Core.Cliente.Infraestructura
         public async Task<int> Update(ClienteModel cliente)
         {
             int rowsAffected;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 rowsAffected = await dbConnection.ExecuteAsync(

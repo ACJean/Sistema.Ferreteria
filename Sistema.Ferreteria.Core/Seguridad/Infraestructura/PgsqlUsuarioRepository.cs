@@ -28,7 +28,7 @@ namespace Sistema.Ferreteria.Core.Seguridad.Infraestructura
         public async Task<UsuarioModel?> Get(string usuario, string clave)
         {
             UsuarioModel? usuarioModel = null;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 usuarioModel = await dbConnection.QueryFirstOrDefaultAsync<UsuarioModel>(
@@ -42,7 +42,7 @@ namespace Sistema.Ferreteria.Core.Seguridad.Infraestructura
         public async Task<int> Register(UsuarioModel usuario)
         {
             int id = 0;
-            using (IDbConnection dbConnection = new NpgsqlConnection(_config.GetConnectionString("db_ferreteria")))
+            using (IDbConnection dbConnection = new NpgsqlConnection(Environment.GetEnvironmentVariable("db_ferreteria")))
             {
                 dbConnection.Open();
                 id = await dbConnection.ExecuteScalarAsync<int>(
