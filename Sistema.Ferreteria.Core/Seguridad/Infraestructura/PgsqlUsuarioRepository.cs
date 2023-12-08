@@ -32,8 +32,8 @@ namespace Sistema.Ferreteria.Core.Seguridad.Infraestructura
             {
                 dbConnection.Open();
                 usuarioModel = await dbConnection.QueryFirstOrDefaultAsync<UsuarioModel>(
-                    "select usu_id as Id, usu_nombre as Nombre, usu_correo as Correo, usu_rol as Rol " +
-                    "from usuario where (usu_nombre = @Usuario or usu_correo = @Usuario) and usu_clave = @Clave",
+                    "select usu_id as Id, usu_nombre as Nombre, usu_correo as Correo, usu_rol as Rol, cli_cedula as Cedula " +
+                    "from usuario left join cliente on usu_cliente_id = cli_id where (usu_nombre = @Usuario or usu_correo = @Usuario) and usu_clave = @Clave",
                     new { Usuario = usuario, Clave = clave });
             }
             return usuarioModel;

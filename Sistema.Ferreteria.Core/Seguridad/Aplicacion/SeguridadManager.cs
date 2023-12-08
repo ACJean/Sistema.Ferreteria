@@ -43,15 +43,17 @@ namespace Sistema.Ferreteria.Core.Seguridad.Aplicacion
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim("name", usuario.Correo),
+                    new Claim("id", usuario.Id.ToString()),
+                    new Claim("role", usuario.Rol),
+            };
+            if (usuario.Cedula != null) claims.Add(new Claim("identificacion", usuario.Cedula));
             var Sectoken = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
                 _config["Jwt:Issuer"],
-                new Claim[]
-                {
-                    new Claim("name", usuario.Correo),
-                    new Claim("id", usuario.Id.ToString()),
-                    new Claim("role", usuario.Rol)
-                },
+                claims.ToArray(),
                 expires: DateTime.Now.AddMinutes(_config.GetSection("Jwt:TimeOut").Get<int>()),
                 signingCredentials: credentials);
 

@@ -10,6 +10,7 @@ namespace Sistema.Ferreteria.Core.Seguridad.Dominio
         public string Correo { get; set; }
         public string Clave { get; set; }
         public string Rol { get; set; }
+        public string Cedula { get; set; }
 
     }
 }
